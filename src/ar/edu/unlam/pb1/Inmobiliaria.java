@@ -442,6 +442,42 @@ public class Inmobiliaria {
 		
 	}
 
+	public void venderCasa(Casa casita) {
+		for (int i = 0; i < casas.length; i++) {
+			if (casas[i] == casita) {
+				casas[i].setEstaDisponible(false);
+				casas[i].setTipo(TIPO_DE_OPERACION.VENTA);
+			}
+		}
+		
+	}
+
+	public Double obtenerValorPromedioDeLasCasas() {
+		Integer contador = 0;
+		Double suma = 0.0;
+		for (int i = 0; i < casas.length; i++) {
+			if (casas[i] != null) {
+				suma += casas[i].getPrecio();
+				contador ++;
+			}
+			
+		}
+		return suma/contador;
+	}
+
+	public Double obtenerValorPromedioDeLosDepartamentos() {
+		Integer contador = 0;
+		Double suma = 0.0;
+		for (int i = 0; i < departamentos.length; i++) {
+			if (departamentos[i] != null) {
+				suma += departamentos[i].getPrecio();
+				contador ++;
+			}
+			
+		}
+		return suma/contador;
+	}
+
 	
 	
 	

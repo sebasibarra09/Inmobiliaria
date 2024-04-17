@@ -64,4 +64,25 @@ class test {
 		assertFalse(prop.addDepartamento(departamentito2));
 	
 	}	
+	
+
+	@Test
+	void queSePuedaObtenerElValorPromedioDeLasCasas() {
+		Casa casita = new Casa("15", "Titanic", 1212, "La Matanza", 20.0);
+		Casa casita2 = new Casa("13", "Titanic", 1213, "La Matanza", 20.0);
+		Inmobiliaria prop = new Inmobiliaria("Prop", "Arieta", "prop@gmail.com", "1155447913");
+		prop.addCasa(casita);
+		prop.addCasa(casita2);
+		assertEquals(prop.obtenerValorPromedioDeLasCasas(), 20.0);
+	}
+	
+	@Test
+	void queSePuedaObtenerElValorPromedioDeLosDepartamentos() {
+		Departamento departamentito = new Departamento("15", "Titanic", 1212,"4", "C", "La Matanza", 60.0);
+		Departamento departamentito2 = new Departamento("15", "Titanic", 1212,"4", "D", "La Matanza", 20.0);
+		Inmobiliaria prop = new Inmobiliaria("Prop", "Arieta", "prop@gmail.com", "1155447913");
+		prop.addDepartamento(departamentito);
+		prop.addDepartamento(departamentito2);
+		assertEquals(prop.obtenerValorPromedioDeLosDepartamentos(), 40.0);
+	}
 }

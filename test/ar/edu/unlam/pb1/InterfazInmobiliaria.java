@@ -178,7 +178,7 @@ public class InterfazInmobiliaria {
 			break;
 		case 4:
 			System.out.println("El listado ordenado por precio seria:");
-			prop.ordenarPorPrecio();
+			//prop.ordenarPorPrecio();
 	
 			break;
 		case 5:

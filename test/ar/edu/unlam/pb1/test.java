@@ -123,6 +123,5 @@ class test {
 		Inmobiliaria prop = new Inmobiliaria("Prop", "Arieta", "prop@gmail.com", "1155447913");
 		prop.addCliente(clien);
 		assertFalse(prop.addCliente(clien));
-
 	}
 }

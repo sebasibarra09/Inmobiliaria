@@ -2,6 +2,7 @@ package ar.edu.unlam.pb1;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -14,16 +15,13 @@ public class Inmobiliaria {
 	private String direccion;
 	private String eMail;
 	private String telefono;
-	private List<Casa> casas;
-	private List<Departamento> departamentos;
-	private PH phs[];
-	private Terreno terrenos[];
-	private Campo campos[];
-	private final Integer CANTIDAD_MAXIMA_DE_PROPIEDADES = 100;
+	private HashSet<Propiedad> propiedades;
+	private HashSet<Casa> casas;
+	private HashSet<Departamento> departamentos;
+	private HashSet<PH> phs;
+	private HashSet<Terreno> terrenos;
+	private HashSet<Campo> campos;
 	private HashSet<Cliente> clientes;
-	private final Integer CANTIDAD_MAXIMA_DE_CLIENTES= 100;
-	private Integer contadorDeCasas= 1;
-	private Integer contadorDeClientes= 1;
 	Scanner lectura = new Scanner (System.in);
 	
 	
@@ -32,15 +30,16 @@ public class Inmobiliaria {
 		this.direccion = direccion;
 		this.eMail = eMail;
 		this.telefono = telefono;
-		this.casas= new ArrayList<>();
-		this.departamentos= new ArrayList<>();
-		this.phs= new PH[CANTIDAD_MAXIMA_DE_PROPIEDADES];
-		this.terrenos= new Terreno[CANTIDAD_MAXIMA_DE_PROPIEDADES];
-		this.campos= new Campo[CANTIDAD_MAXIMA_DE_PROPIEDADES];
+		this.casas= new HashSet<>();
+		this.departamentos= new HashSet<>();
+		this.terrenos= new HashSet<>();
+		this.campos= new HashSet<>();
 		this.clientes= new HashSet<>();
+		this.propiedades= new HashSet<>();
 	}
 	
 	public Boolean addCasa(Casa nueva) {
+		propiedades.add(nueva);
 		return casas.add(nueva);
 	}
 	
@@ -87,6 +86,8 @@ public class Inmobiliaria {
     }
 	
 	public Boolean addDepartamento(Departamento nueva) {
+		propiedades.add(nueva);
+		System.out.println(nueva);
 		return departamentos.add(nueva);
 	}
 	
@@ -143,14 +144,8 @@ public class Inmobiliaria {
     }
 		
 	public Boolean addPH(PH nueva) {
-		for (int i = 0; i < CANTIDAD_MAXIMA_DE_PROPIEDADES; i++) {
-			if (phs[i]== null) {
-				phs[i] = nueva;
-				System.out.println(nueva.toString());
-				return true;
-			}
-		}
-		return false;
+		propiedades.add(nueva);
+		return phs.add(nueva);
 	}
 	
 	public void editarPHPorCodigo(String codigoBuscado) {
@@ -195,14 +190,8 @@ public class Inmobiliaria {
     }
 	
 	public Boolean addTerreno(Terreno nueva) {
-		for (int i = 0; i < CANTIDAD_MAXIMA_DE_PROPIEDADES; i++) {
-			if (terrenos[i]== null) {
-				terrenos[i] = nueva;
-				System.out.println(nueva.toString());
-				return true;
-			}
-		}
-		return false;
+		propiedades.add(nueva);
+		return terrenos.add(nueva);
 	}
 	
 	public void editarTerrenoPorCodigo(String codigoBuscado) {
@@ -246,14 +235,8 @@ public class Inmobiliaria {
         return ; 
     }
 	public Boolean addCampo(Campo nueva) {
-		for (int i = 0; i < CANTIDAD_MAXIMA_DE_PROPIEDADES; i++) {
-			if (campos[i]== null) {
-				campos[i] = nueva;
-				System.out.println(nueva.toString());
-				return true;
-			}
-		}
-		return false;
+		campos.add(nueva);
+		return campos.add(nueva);
 	}
 	
 	public void editarCampoPorCodigo(String codigoBuscado) {
@@ -327,33 +310,6 @@ public class Inmobiliaria {
 		this.telefono = telefono;
 	}
 
-	public PH[] getPhs() {
-		return phs;
-	}
-
-	public void setPhs(PH[] phs) {
-		this.phs = phs;
-	}
-
-	public Terreno[] getTerrenos() {
-		return terrenos;
-	}
-
-	public void setTerrenos(Terreno[] terrenos) {
-		this.terrenos = terrenos;
-	}
-
-	public Campo[] getCampos() {
-		return campos;
-	}
-
-	public void setCampos(Campo[] campos) {
-		this.campos = campos;
-	}
-
-	public Integer getCANTIDAD_MAXIMA_DE_PROPIEDADES() {
-		return CANTIDAD_MAXIMA_DE_PROPIEDADES;
-	}
 /*
 	public void ordenarPorPrecio() {
 		Casa auxOrdenamiento[] ;
@@ -392,7 +348,7 @@ public class Inmobiliaria {
 		
 	}
 */
-	public ArrayList<Casa> buscarCasasPorRangoDeprecio(Double precioMinimo, double precioMaximo){
+	public ArrayList<Casa> buscarCasasPorRangoDeprecio(Double precioMinimo, Double precioMaximo){
 		ArrayList<Casa> resultado = new ArrayList<Casa>();
 		for (Casa actual : casas) {
 			if (actual.getPrecio() >= precioMinimo && actual.getPrecio() <= precioMaximo) {
@@ -401,6 +357,22 @@ public class Inmobiliaria {
 		}
 		return resultado;
 	}
+	
+
+	
+	public List<Propiedad> obtenerListadoDePropiedadesOrdenadosPorPrecio() {
+        TreeSet<Propiedad> propiedadesOrdenadas = new TreeSet<>(Comparator.comparingDouble(Propiedad::getPrecio));
+        propiedadesOrdenadas.addAll(propiedades);
+        return new ArrayList<>(propiedadesOrdenadas);
+    }
+	
+	public List<Propiedad> obtenerListadoDePropiedadesOrdenadosPorUbicacion() {
+		List<Propiedad> propiedadesOrdenadasPorUbicacion = new ArrayList<>(propiedades);
+	   propiedadesOrdenadasPorUbicacion.sort(Comparator.comparing(propiedad -> propiedad.getCiudad()));
+	   return propiedadesOrdenadasPorUbicacion;
+    }
+	
+	
 	public void venderCasa(Casa casita) {
 		for (Casa actual : casas) {
 			if (actual == casita) {
@@ -427,19 +399,19 @@ public class Inmobiliaria {
 	}
 
 	
-	public List<Casa> getCasas() {
+	public HashSet<Casa> getCasas() {
 		return casas;
 	}
 
-	public void setCasas(List<Casa> casas) {
+	public void setCasas(HashSet<Casa> casas) {
 		this.casas = casas;
 	}
 
-	public List<Departamento> getDepartamentos() {
+	public HashSet<Departamento> getDepartamentos() {
 		return departamentos;
 	}
 
-	public void setDepartamentos(List<Departamento> departamentos) {
+	public void setDepartamentos(HashSet<Departamento> departamentos) {
 		this.departamentos = departamentos;
 	}
 
@@ -450,6 +422,8 @@ public class Inmobiliaria {
 	public void setClientes(HashSet<Cliente> clientes) {
 		this.clientes = clientes;
 	}
+
+
 
 	
 	

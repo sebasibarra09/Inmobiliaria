@@ -36,16 +36,16 @@ class test {
 		assertTrue(prop.getCasas().contains(casita4));
 		assertTrue(prop.getCasas().contains(casita5));
 	}
-/*
+
 	@Test
 	void queNoSePuedanDarDeAltaDosCasasConUnaMismaDireccion () {
 		Casa casita = new Casa("15", "Titanic", 1212, "La Matanza", 20.0);
-		Casa casita2 = new Casa("13", "Titanic", 1212, "La Matanza", 20.0);
+		Casa casita2 = new Casa("15", "Titanic", 1212, "La Matanza", 20.0);
 		Inmobiliaria prop = new Inmobiliaria("Prop", "Arieta", "prop@gmail.com", "1155447913");
 		prop.addCasa(casita);
 		assertFalse(prop.addCasa(casita2));
 	}
-	*/
+
 	@Test
 	void queSePuedaDarDeAltaUnDepartamentoEnLaInmobiliaria() {
 		Departamento departamentito = new Departamento("15", "Titanic", 1212,"4", "C", "La Matanza", 20.0);
@@ -64,7 +64,7 @@ class test {
 		assertTrue(prop.getDepartamentos().contains(departamentito));
 		assertTrue(prop.getDepartamentos().contains(departamentito2));
 	}
-	/*
+	
 	@Test
 	void queNoSePuedanDarDeAltaDosDepartamentoConUnaMismaDireccion () {
 		Departamento departamentito = new Departamento("15", "Titanic", 1212,"4", "C", "La Matanza", 20.0);
@@ -74,7 +74,6 @@ class test {
 		assertFalse(prop.addDepartamento(departamentito2));
 	
 	}	
-	*/
 
 	@Test
 	void queSePuedaObtenerElValorPromedioDeLasCasas() {
@@ -89,7 +88,7 @@ class test {
 	@Test
 	void queSePuedaObtenerElValorPromedioDeLosDepartamentos() {
 		Departamento departamentito = new Departamento("15", "Titanic", 1212,"4", "C", "La Matanza", 60.0);
-		Departamento departamentito2 = new Departamento("15", "Titanic", 1212,"4", "D", "La Matanza", 20.0);
+		Departamento departamentito2 = new Departamento("12", "Titanic", 1212,"4", "D", "La Matanza", 20.0);
 		Inmobiliaria prop = new Inmobiliaria("Prop", "Arieta", "prop@gmail.com", "1155447913");
 		prop.addDepartamento(departamentito);
 		prop.addDepartamento(departamentito2);
@@ -124,4 +123,64 @@ class test {
 		prop.addCliente(clien);
 		assertFalse(prop.addCliente(clien));
 	}
+	
+	@Test
+	void queSePuedaObtenerElListadoDePropiedadesOrdenadosPorPrecio() {
+		Departamento departamentito = new Departamento("15", "Titanic", 1212,"4", "C", "La Matanza", 60.0);
+		Departamento departamentito2 = new Departamento("12", "Titanic", 1212,"4", "D", "La Matanza", 20.0);
+		Departamento departamentito3 = new Departamento("1", "Titanic", 1212,"4", "D", "La Matanza", 80.0);
+		Departamento departamentito4 = new Departamento("10", "Titanic", 1212,"4", "D", "La Matanza", 1000.0);
+		Inmobiliaria prop = new Inmobiliaria("Prop", "Arieta", "prop@gmail.com", "1155447913");
+		prop.addDepartamento(departamentito);
+		prop.addDepartamento(departamentito2);
+		prop.addDepartamento(departamentito3);
+		prop.addDepartamento(departamentito4);
+		System.out.println(prop.obtenerListadoDePropiedadesOrdenadosPorPrecio());
+		assertTrue(true);
+	}
+	
+	@Test
+	void queSePuedaObtenerElListadoDePropiedadesOrdenadosUbicacion() {
+		Departamento departamentito = new Departamento("15", "Titanic", 1212,"4", "C", "La Matanza2", 60.0);
+		Departamento departamentito2 = new Departamento("12", "Titanic", 1212,"4", "D", "La Matanza5", 20.0);
+		Departamento departamentito3 = new Departamento("1", "Titanic", 1212,"4", "D", "La Matanza4", 80.0);
+		Departamento departamentito4 = new Departamento("10", "Titanic", 1212,"4", "D", "La Matanza3", 1000.0);
+		Inmobiliaria prop = new Inmobiliaria("Prop", "Arieta", "prop@gmail.com", "1155447913");
+		prop.addDepartamento(departamentito);
+		prop.addDepartamento(departamentito2);
+		prop.addDepartamento(departamentito3);
+		prop.addDepartamento(departamentito4);
+		System.out.println(prop.obtenerListadoDePropiedadesOrdenadosPorUbicacion());
+		assertTrue(true);
+	}
+	
+	@Test
+	void queLaBusquedaPorRangoDePrecioDeMeArrojeUnArrayNoNuloSiAplicanResultados() {
+		Departamento departamentito = new Departamento("15", "Titanic", 1212,"4", "C", "La Matanza", 60.0);
+		Departamento departamentito2 = new Departamento("12", "Titanic", 1212,"4", "D", "La Matanza", 20.0);
+		Departamento departamentito3 = new Departamento("1", "Titanic", 1212,"4", "D", "La Matanza", 80.0);
+		Departamento departamentito4 = new Departamento("10", "Titanic", 1212,"4", "D", "La Matanza", 1000.0);
+		Inmobiliaria prop = new Inmobiliaria("Prop", "Arieta", "prop@gmail.com", "1155447913");
+		prop.addDepartamento(departamentito);
+		prop.addDepartamento(departamentito2);
+		prop.addDepartamento(departamentito3);
+		prop.addDepartamento(departamentito4);
+		assertNotNull(prop.buscarCasasPorRangoDeprecio(25.0, 85.0));
+	}
+	
+	@Test
+	void queLaBusquedaPorRangoDePrecioDeCasasMeArrojeUnArrayNuloSiNoAplicanResultados() {
+		Departamento departamentito = new Departamento("15", "Titanic", 1212,"4", "C", "La Matanza", 60.0);
+		Departamento departamentito2 = new Departamento("12", "Titanic", 1212,"4", "D", "La Matanza", 20.0);
+		Departamento departamentito3 = new Departamento("1", "Titanic", 1212,"4", "D", "La Matanza", 80.0);
+		Departamento departamentito4 = new Departamento("10", "Titanic", 1212,"4", "D", "La Matanza", 1000.0);
+		Inmobiliaria prop = new Inmobiliaria("Prop", "Arieta", "prop@gmail.com", "1155447913");
+		prop.addDepartamento(departamentito);
+		prop.addDepartamento(departamentito2);
+		prop.addDepartamento(departamentito3);
+		prop.addDepartamento(departamentito4);
+		assertTrue(prop.buscarCasasPorRangoDeprecio(1001.0, 1085.0).isEmpty());
+	}
+	
+	
 }

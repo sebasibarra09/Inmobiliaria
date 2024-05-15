@@ -127,15 +127,15 @@ class test {
 	@Test
 	void queSePuedaObtenerElListadoDePropiedadesOrdenadosPorPrecio() {
 		Departamento departamentito = new Departamento("15", "Titanic", 1212,"4", "C", "La Matanza", 60.0);
-		Departamento departamentito2 = new Departamento("12", "Titanic", 1212,"4", "D", "La Matanza", 20.0);
+		Departamento departamentito2 = new Departamento("12", "Titanic", 1212,"4", "D", "La Matanza", 90.0);
 		Departamento departamentito3 = new Departamento("1", "Titanic", 1212,"4", "D", "La Matanza", 80.0);
-		Departamento departamentito4 = new Departamento("10", "Titanic", 1212,"4", "D", "La Matanza", 1000.0);
+		Departamento departamentito4 = new Departamento("10", "Titanic", 1212,"4", "D", "La Matanza", 85.0);
 		Inmobiliaria prop = new Inmobiliaria("Prop", "Arieta", "prop@gmail.com", "1155447913");
 		prop.addDepartamento(departamentito);
 		prop.addDepartamento(departamentito2);
 		prop.addDepartamento(departamentito3);
 		prop.addDepartamento(departamentito4);
-		System.out.println(prop.obtenerListadoDePropiedadesOrdenadosPorPrecio());
+		System.out.println(prop.obtenerListadoDePropiedadesOrdenadosPorPrecio2());
 		assertTrue(true);
 	}
 	

@@ -366,6 +366,27 @@ public class Inmobiliaria {
         return new ArrayList<>(propiedadesOrdenadas);
     }
 	
+	public List<Propiedad> obtenerListadoDePropiedadesOrdenadosPorPrecio2() {
+		ArrayList<Propiedad> propiedadesOrdenadas = new ArrayList<>();
+		propiedadesOrdenadas.addAll(propiedades);
+		for (int j = 0; j < propiedades.size()-1; j++) {
+			for (int i = 0; i < propiedades.size()-1; i++) {
+				if (propiedadesOrdenadas.get(i+1)!= null && propiedadesOrdenadas.get(i)!=null) {
+					if (propiedadesOrdenadas.get(i+1).getPrecio() < propiedadesOrdenadas.get(i).getPrecio()) {
+						Propiedad listado = propiedadesOrdenadas.get(i);
+						propiedadesOrdenadas.set(i, propiedadesOrdenadas.get(i+1));
+						propiedadesOrdenadas.set(i+1, listado);
+					}
+				}
+				
+			}
+			
+		}
+		
+		return propiedadesOrdenadas;
+		
+	}
+	
 	public List<Propiedad> obtenerListadoDePropiedadesOrdenadosPorUbicacion() {
 		List<Propiedad> propiedadesOrdenadasPorUbicacion = new ArrayList<>(propiedades);
 	   propiedadesOrdenadasPorUbicacion.sort(Comparator.comparing(propiedad -> propiedad.getCiudad()));
@@ -422,6 +443,8 @@ public class Inmobiliaria {
 	public void setClientes(HashSet<Cliente> clientes) {
 		this.clientes = clientes;
 	}
+
+
 
 
 

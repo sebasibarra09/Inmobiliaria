@@ -8,6 +8,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Scanner;
 import java.util.TreeSet;
+import java.util.function.BooleanSupplier;
 
 public class Inmobiliaria {
 	
@@ -39,6 +40,7 @@ public class Inmobiliaria {
 	}
 	
 	public Boolean addCasa(Casa nueva) {
+		nueva.setTipo(TIPO_DE_OPERACION.ADQUIRIDO);
 		propiedades.add(nueva);
 		return casas.add(nueva);
 	}
@@ -86,8 +88,8 @@ public class Inmobiliaria {
     }
 	
 	public Boolean addDepartamento(Departamento nueva) {
+		nueva.setTipo(TIPO_DE_OPERACION.ADQUIRIDO);
 		propiedades.add(nueva);
-		System.out.println(nueva);
 		return departamentos.add(nueva);
 	}
 	
@@ -235,7 +237,8 @@ public class Inmobiliaria {
         return ; 
     }
 	public Boolean addCampo(Campo nueva) {
-		campos.add(nueva);
+		nueva.setTipo(TIPO_DE_OPERACION.ADQUIRIDO);
+		propiedades.add(nueva);
 		return campos.add(nueva);
 	}
 	
@@ -358,15 +361,8 @@ public class Inmobiliaria {
 		return resultado;
 	}
 	
-
 	
 	public List<Propiedad> obtenerListadoDePropiedadesOrdenadosPorPrecio() {
-        TreeSet<Propiedad> propiedadesOrdenadas = new TreeSet<>(Comparator.comparingDouble(Propiedad::getPrecio));
-        propiedadesOrdenadas.addAll(propiedades);
-        return new ArrayList<>(propiedadesOrdenadas);
-    }
-	
-	public List<Propiedad> obtenerListadoDePropiedadesOrdenadosPorPrecio2() {
 		ArrayList<Propiedad> propiedadesOrdenadas = new ArrayList<>();
 		propiedadesOrdenadas.addAll(propiedades);
 		for (int j = 0; j < propiedades.size()-1; j++) {
@@ -394,13 +390,34 @@ public class Inmobiliaria {
     }
 	
 	
-	public void venderCasa(Casa casita) {
-		for (Casa actual : casas) {
-			if (actual == casita) {
-				actual.setTipo(TIPO_DE_OPERACION.VENTA);
+	public Boolean venderPropiedad(Propiedad casita, Cliente clien) {
+		if (casita.getEstaDisponible().equals(true)) {
+			for (Propiedad actual : propiedades) {
+				if (actual == casita) {
+					actual.setTipo(TIPO_DE_OPERACION.VENTA);
+					actual.setEstaDisponible(false);
+					actual.setDueno(clien);
+					return true;
+				}
 			}
+			
 		}
+		return false;
+	}
 		
+	
+	public Boolean alquilaPropiedad(Propiedad casita, Cliente clien) {
+		if (casita.getEstaDisponible().equals(true)) {
+		for (Propiedad actual : propiedades) {
+			if (actual == casita) {
+				actual.setTipo(TIPO_DE_OPERACION.ALQUILER);
+				actual.setEstaDisponible(false);
+				actual.setInquilino(clien);
+				return true;
+			}
+		}	
+		}
+		return false;
 	}
 
 	public Double obtenerValorPromedioDeLasCasas() {
@@ -443,6 +460,26 @@ public class Inmobiliaria {
 	public void setClientes(HashSet<Cliente> clientes) {
 		this.clientes = clientes;
 	}
+
+	public List<Propiedad> buscarPropiedadesPorVenta() {
+		ArrayList<Propiedad> propiedadesVendidas = new ArrayList<>();
+		for (Propiedad propiedad : propiedades) {
+			if (propiedad.getTipo().equals(TIPO_DE_OPERACION.VENTA)) {
+				propiedadesVendidas.add(propiedad);
+			}
+		}
+		return propiedadesVendidas;
+	}
+
+	public HashSet<Propiedad> getPropiedades() {
+		return propiedades;
+	}
+
+	public void setPropiedades(HashSet<Propiedad> propiedades) {
+		this.propiedades = propiedades;
+	}
+
+	
 
 
 

@@ -40,10 +40,44 @@ class test {
 	@Test
 	void queNoSePuedanDarDeAltaDosCasasConUnaMismaDireccion () {
 		Casa casita = new Casa("15", "Titanic", 1212, "La Matanza", 20.0);
-		Casa casita2 = new Casa("15", "Titanic", 1212, "La Matanza", 20.0);
+		Casa casita2 = new Casa("1", "Titanic", 1212, "La Matanza", 20.0);
 		Inmobiliaria prop = new Inmobiliaria("Prop", "Arieta", "prop@gmail.com", "1155447913");
 		prop.addCasa(casita);
 		assertFalse(prop.addCasa(casita2));
+	}
+	
+	@Test
+	void queSePuedaVenderUnaCasaEnLaInmobiliaria() {
+		Casa casita = new Casa("15", "Titanic", 1212, "La Matanza", 20.0);
+		Inmobiliaria prop = new Inmobiliaria("Prop", "Arieta", "prop@gmail.com", "1155447913");
+		Cliente clien = new Cliente(121212, "Seba", "Ibarra", "seba12Qgmail.com", "1152528525");
+		prop.addCasa(casita);
+		prop.venderPropiedad(casita, clien);
+		assertEquals(casita.getDueno(), clien);
+		assertEquals(casita.getEstaDisponible(), false);
+		assertEquals(casita.getTipo(), TIPO_DE_OPERACION.VENTA);
+	}
+	
+	@Test
+	void queNoSePuedaVenderUnaCasaEnLaInmobiliariaPorqueYaSeVendio() {
+		Casa casita = new Casa("15", "Titanic", 1212, "La Matanza", 20.0);
+		Inmobiliaria prop = new Inmobiliaria("Prop", "Arieta", "prop@gmail.com", "1155447913");
+		Cliente clien = new Cliente(121212, "Seba", "Ibarra", "seba12Qgmail.com", "1152528525");
+		prop.addCasa(casita);
+		prop.venderPropiedad(casita, clien);
+		assertFalse(prop.venderPropiedad(casita, clien));
+	}
+	
+	@Test
+	void queSePuedaAlquilarUnaCasaEnLaInmobiliaria() {
+		Casa casita = new Casa("15", "Titanic", 1212, "La Matanza", 20.0);
+		Inmobiliaria prop = new Inmobiliaria("Prop", "Arieta", "prop@gmail.com", "1155447913");
+		Cliente clien = new Cliente(121212, "Seba", "Ibarra", "seba12Qgmail.com", "1152528525");
+		prop.addCasa(casita);
+		prop.alquilaPropiedad(casita, clien);
+		assertEquals(casita.getInquilino(), clien);
+		assertEquals(casita.getEstaDisponible(), false);
+		assertEquals(casita.getTipo(), TIPO_DE_OPERACION.ALQUILER);
 	}
 
 	@Test
@@ -135,7 +169,7 @@ class test {
 		prop.addDepartamento(departamentito2);
 		prop.addDepartamento(departamentito3);
 		prop.addDepartamento(departamentito4);
-		System.out.println(prop.obtenerListadoDePropiedadesOrdenadosPorPrecio2());
+		System.out.println(prop.obtenerListadoDePropiedadesOrdenadosPorPrecio());
 		assertTrue(true);
 	}
 	
@@ -180,6 +214,43 @@ class test {
 		prop.addDepartamento(departamentito3);
 		prop.addDepartamento(departamentito4);
 		assertTrue(prop.buscarCasasPorRangoDeprecio(1001.0, 1085.0).isEmpty());
+	}
+	
+	@Test
+	void queLaBusquedaDePropiedadesPorVentaMeArrojeUnaLista() {
+		Departamento departamentito = new Departamento("15", "Titanic", 1212,"4", "C", "La Matanza", 60.0);
+		Casa casita = new Casa("15", "Titanic", 1212, "La Matanza", 20.0);
+		Departamento departamentito3 = new Departamento("1", "Titanic", 1212,"4", "D", "La Matanza", 80.0);
+		Departamento departamentito4 = new Departamento("10", "Titanic", 1212,"4", "D", "La Matanza", 1000.0);
+		Inmobiliaria prop = new Inmobiliaria("Prop", "Arieta", "prop@gmail.com", "1155447913");
+		Cliente clien = new Cliente(121212, "Seba", "Ibarra", "seba12Qgmail.com", "1152528525");
+		prop.addDepartamento(departamentito);
+		prop.addCasa(casita);
+		prop.addDepartamento(departamentito3);
+		prop.addDepartamento(departamentito4);
+		prop.venderPropiedad(departamentito, clien);
+		prop.venderPropiedad(casita, clien);
+		prop.venderPropiedad(departamentito3, clien);
+		prop.venderPropiedad(departamentito4, clien);
+		prop.venderPropiedad(departamentito4, clien);
+		System.out.println(prop.buscarPropiedadesPorVenta().toString());
+		assertEquals(prop.buscarPropiedadesPorVenta().size(), 4 );
+	}
+	
+	@Test
+	void queLaBusquedaDePropiedadesPorVentaMeArrojeUnaListaNuloSiNoAplicanResultados() {
+		Departamento departamentito = new Departamento("15", "Titanic", 1212,"4", "C", "La Matanza", 60.0);
+		Departamento departamentito2 = new Departamento("12", "Titanic", 1212,"4", "D", "La Matanza", 20.0);
+		Departamento departamentito3 = new Departamento("1", "Titanic", 1212,"4", "D", "La Matanza", 80.0);
+		Departamento departamentito4 = new Departamento("10", "Titanic", 1212,"4", "D", "La Matanza", 1000.0);
+		Inmobiliaria prop = new Inmobiliaria("Prop", "Arieta", "prop@gmail.com", "1155447913");
+		Cliente clien = new Cliente(121212, "Seba", "Ibarra", "seba12Qgmail.com", "1152528525");
+		prop.addDepartamento(departamentito);
+		prop.addDepartamento(departamentito2);
+		prop.addDepartamento(departamentito3);
+		prop.addDepartamento(departamentito4);
+		System.out.println(prop.buscarPropiedadesPorVenta().toString());
+		assertTrue(prop.buscarPropiedadesPorVenta().isEmpty());
 	}
 	
 	

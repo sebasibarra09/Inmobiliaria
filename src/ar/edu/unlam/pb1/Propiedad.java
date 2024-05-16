@@ -7,6 +7,8 @@ public class Propiedad {
 	protected Integer numero;
 	protected String ciudad;
 	protected Double precio;
+	protected Cliente dueno;
+	protected Cliente inquilino;
 	protected Boolean estaDisponible;
 	protected TIPO_DE_OPERACION tipo;
 	
@@ -16,6 +18,8 @@ public class Propiedad {
 		this.numero = numero;
 		this.ciudad = ciudad;
 		this.precio = precio;
+		this.dueno = dueno;
+		this.inquilino = inquilino;
 		this.estaDisponible= true;
 	}
 
@@ -75,11 +79,32 @@ public class Propiedad {
 		this.tipo = tipo;
 	}
 
+
+
+	public Cliente getDueno() {
+		return dueno;
+	}
+
+	public void setDueno(Cliente dueno) {
+		this.dueno = dueno;
+	}
+
+	public Cliente getInquilino() {
+		return inquilino;
+	}
+
+	public void setInquilino(Cliente inquilino) {
+		this.inquilino = inquilino;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((codigo == null) ? 0 : codigo.hashCode());
+		result = prime * result + ((calle == null) ? 0 : calle.hashCode());
+		result = prime * result + ((ciudad == null) ? 0 : ciudad.hashCode());
+		result = prime * result + ((numero == null) ? 0 : numero.hashCode());
+		result = prime * result + ((precio == null) ? 0 : precio.hashCode());
 		return result;
 	}
 
@@ -92,12 +117,34 @@ public class Propiedad {
 		if (getClass() != obj.getClass())
 			return false;
 		Propiedad other = (Propiedad) obj;
-		if (codigo == null) {
-			if (other.codigo != null)
+		if (calle == null) {
+			if (other.calle != null)
 				return false;
-		} else if (!codigo.equals(other.codigo))
+		} else if (!calle.equals(other.calle))
+			return false;
+		if (ciudad == null) {
+			if (other.ciudad != null)
+				return false;
+		} else if (!ciudad.equals(other.ciudad))
+			return false;
+		if (numero == null) {
+			if (other.numero != null)
+				return false;
+		} else if (!numero.equals(other.numero))
+			return false;
+		if (precio == null) {
+			if (other.precio != null)
+				return false;
+		} else if (!precio.equals(other.precio))
 			return false;
 		return true;
+	}
+
+	@Override
+	public String toString() {
+		return "Propiedad [codigo=" + codigo + ", calle=" + calle + ", numero=" + numero + ", ciudad=" + ciudad
+				+ ", precio=" + precio + ", dueno=" + dueno + ", inquilino=" + inquilino + ", estaDisponible="
+				+ estaDisponible + ", tipo=" + tipo + "]";
 	}
 
 

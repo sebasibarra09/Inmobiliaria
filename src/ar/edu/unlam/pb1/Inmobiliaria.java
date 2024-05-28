@@ -17,13 +17,7 @@ public class Inmobiliaria {
 	private String eMail;
 	private String telefono;
 	private HashSet<Propiedad> propiedades;
-	private HashSet<Casa> casas;
-	private HashSet<Departamento> departamentos;
-	private HashSet<PH> phs;
-	private HashSet<Terreno> terrenos;
-	private HashSet<Campo> campos;
 	private HashSet<Cliente> clientes;
-	Scanner lectura = new Scanner (System.in);
 	
 	
 	public Inmobiliaria(String nombre, String direccion, String eMail, String telefono) {
@@ -31,259 +25,31 @@ public class Inmobiliaria {
 		this.direccion = direccion;
 		this.eMail = eMail;
 		this.telefono = telefono;
-		this.casas= new HashSet<>();
-		this.departamentos= new HashSet<>();
-		this.terrenos= new HashSet<>();
-		this.campos= new HashSet<>();
-		this.clientes= new HashSet<>();
 		this.propiedades= new HashSet<>();
+		this.clientes= new HashSet<>();
 	}
 	
-	public Boolean addCasa(Casa nueva) {
+	public Boolean add(Propiedad nueva) {
 		nueva.setTipo(TIPO_DE_OPERACION.ADQUIRIDO);
-		propiedades.add(nueva);
-		return casas.add(nueva);
+		return propiedades.add(nueva);
 	}
 	
-	public void editarCasaPorCodigo(String codigoABuscar) {
-        for (Casa casita : casas) {
-            if (casita.getCodigo().equals(codigoABuscar)) {
-            	System.out.println("Que valor desea modificar?");
-            	System.out.println(casita.toString()); 
-            	System.out.println("1. Calle");
-            	System.out.println("2. Numero");
-            	System.out.println("3. Ciudad");
-            	System.out.println("4. Precio");
-            	Integer opcion = lectura.nextInt();
-            	switch (opcion) {
-				case 1:
-					System.out.println("Ingrese el nuevo valor");
-					casita.setCalle(lectura.next());
-					break;
 
-				case 2:
-					System.out.println("Ingrese el nuevo valor");
-					casita.setNumero(lectura.nextInt());
-					break;
-				case 3:
-					System.out.println("Ingrese el nuevo valor");
-					casita.setCiudad(lectura.next());
-					break;
-				case 4:
-					System.out.println("Ingrese el nuevo valor");
-					casita.setPrecio(lectura.nextDouble());
-					break;
-				default:
-					break;
-            	}
-            	System.out.println(casita.toString());
-                return;
-            } else {
-            	System.out.println("No se encontro ese codigo");
-            	return;
-            }
-            
-        }
-        return ; 
-    }
-	
-	public Boolean addDepartamento(Departamento nueva) {
-		nueva.setTipo(TIPO_DE_OPERACION.ADQUIRIDO);
-		propiedades.add(nueva);
-		return departamentos.add(nueva);
+	public HashSet<Cliente> getClientes() {
+		return clientes;
 	}
-	
-	public void editarDepatamentoPorCodigo(String codigoBuscado) {
-		for (Departamento dpto : departamentos) {
-            if (dpto.getCodigo().equals(codigoBuscado)) {
-            	System.out.println("Que valor desea modificar?");
-            	System.out.println(dpto.toString()); 
-            	System.out.println("1. Calle");
-            	System.out.println("2. Numero");
-            	System.out.println("3. Piso");
-            	System.out.println("4. Departamento");
-            	System.out.println("5. Ciudad");
-            	System.out.println("6. Precio");
-            	Integer opcion = lectura.nextInt();
-            	switch (opcion) {
-				case 1:
-					System.out.println("Ingrese el nuevo valor");
-					dpto.setCalle(lectura.next());
-					break;
 
-				case 2:
-					System.out.println("Ingrese el nuevo valor");
-					dpto.setNumero(lectura.nextInt());
-					break;
-				case 3:
-					System.out.println("Ingrese el nuevo valor");
-					dpto.setPiso(lectura.next());
-					break;
-				case 4:
-					System.out.println("Ingrese el nuevo valor");
-					dpto.setDepartamento(lectura.next());
-					break;
-				case 5:
-					System.out.println("Ingrese el nuevo valor");
-					dpto.setCiudad(lectura.next());
-					break;
-				case 6:
-					System.out.println("Ingrese el nuevo valor");
-					dpto.setPrecio(lectura.nextDouble());
-					break;
-				default:
-					break;
-            	}
-            	System.out.println(dpto.toString());
-                return;
-            }
-            else {
-            	System.out.println("No se encontro ese codigo");
-            	return;
-            }
-        }
-        return ; 
-    }
-		
-	public Boolean addPH(PH nueva) {
-		propiedades.add(nueva);
-		return phs.add(nueva);
+	public void setClientes(HashSet<Cliente> clientes) {
+		this.clientes = clientes;
 	}
-	
-	public void editarPHPorCodigo(String codigoBuscado) {
-		for (PH phcito : phs) {
-            if (phcito.getCodigo().equals(codigoBuscado)) {
-            	System.out.println("Que valor desea modificar?");
-            	System.out.println(phcito.toString()); 
-            	System.out.println("1. Calle");
-            	System.out.println("2. Numero");
-            	System.out.println("3. Ciudad");
-            	System.out.println("4. Precio");
-            	Integer opcion = lectura.nextInt();
-            	switch (opcion) {
-				case 1:
-					System.out.println("Ingrese el nuevo valor");
-					phcito.setCalle(lectura.next());
-					break;
 
-				case 2:
-					System.out.println("Ingrese el nuevo valor");
-					phcito.setNumero(lectura.nextInt());
-					break;
-				case 3:
-					System.out.println("Ingrese el nuevo valor");
-					phcito.setCiudad(lectura.next());
-					break;
-				case 4:
-					System.out.println("Ingrese el nuevo valor");
-					phcito.setPrecio(lectura.nextDouble());
-					break;
-				default:
-					break;
-            	}
-            	System.out.println(phcito.toString());
-                return;
-            } else {
-            	System.out.println("No se encontro ese codigo");
-            	return;
-            }
-        }
-        return ; 
-    }
-	
-	public Boolean addTerreno(Terreno nueva) {
-		propiedades.add(nueva);
-		return terrenos.add(nueva);
+	public HashSet<Propiedad> getPropiedades() {
+		return propiedades;
 	}
-	
-	public void editarTerrenoPorCodigo(String codigoBuscado) {
-		for (Terreno terrenito : terrenos) {
-            if (terrenito.getCodigo().equals(codigoBuscado)) {
-            	System.out.println("Que valor desea modificar?");
-            	System.out.println(terrenito.toString()); 
-            	System.out.println("1. Calle");
-            	System.out.println("2. Numero");
-            	System.out.println("3. Ciudad");
-            	System.out.println("4. Precio");
-            	Integer opcion = lectura.nextInt();
-            	switch (opcion) {
-				case 1:
-					System.out.println("Ingrese el nuevo valor");
-					terrenito.setCalle(lectura.next());
-					break;
 
-				case 2:
-					System.out.println("Ingrese el nuevo valor");
-					terrenito.setNumero(lectura.nextInt());
-					break;
-				case 3:
-					System.out.println("Ingrese el nuevo valor");
-					terrenito.setCiudad(lectura.next());
-					break;
-				case 4:
-					System.out.println("Ingrese el nuevo valor");
-					terrenito.setPrecio(lectura.nextDouble());
-					break;
-				default:
-					break;
-            	}
-            	System.out.println(terrenito.toString());
-                return;
-            } else {
-            	System.out.println("No se encontro ese codigo");
-            	return;
-            }
-        }
-        return ; 
-    }
-	public Boolean addCampo(Campo nueva) {
-		nueva.setTipo(TIPO_DE_OPERACION.ADQUIRIDO);
-		propiedades.add(nueva);
-		return campos.add(nueva);
+	public void setPropiedades(HashSet<Propiedad> propiedades) {
+		this.propiedades = propiedades;
 	}
-	
-	public void editarCampoPorCodigo(String codigoBuscado) {
-		for (Campo camp : campos) {
-            if (camp.getCodigo().equals(codigoBuscado)) {
-            	System.out.println("Que valor desea modificar?");
-            	System.out.println(camp.toString()); 
-            	System.out.println("1. Calle");
-            	System.out.println("2. Numero");
-            	System.out.println("3. Ciudad");
-            	System.out.println("4. Precio");
-            	Integer opcion = lectura.nextInt();
-            	switch (opcion) {
-				case 1:
-					System.out.println("Ingrese el nuevo valor");
-					camp.setCalle(lectura.next());
-					break;
-
-				case 2:
-					System.out.println("Ingrese el nuevo valor");
-					camp.setNumero(lectura.nextInt());
-					break;
-				case 3:
-					System.out.println("Ingrese el nuevo valor");
-					camp.setCiudad(lectura.next());
-					break;
-				case 4:
-					System.out.println("Ingrese el nuevo valor");
-					camp.setPrecio(lectura.nextDouble());
-					break;
-				default:
-					break;
-            	}
-            	System.out.println(camp.toString());
-                return;
-            } else {
-            	System.out.println("No se encontro ese codigo");
-            	return;
-            }
-        }
-        return ; 
-    }
-	
-	
 	public Boolean addCliente(Cliente nuevo) {
 		return clientes.add(nuevo);
 	}
@@ -312,48 +78,29 @@ public class Inmobiliaria {
 	public void setTelefono(String telefono) {
 		this.telefono = telefono;
 	}
-
-/*
-	public void ordenarPorPrecio() {
-		Casa auxOrdenamiento[] ;
-		auxOrdenamiento = new Casa[CANTIDAD_MAXIMA_DE_PROPIEDADES*5];
-
-		
-		for (int i = 0; i < CANTIDAD_MAXIMA_DE_PROPIEDADES; i++) {
-			auxOrdenamiento[i]=casas[i];
-			auxOrdenamiento[i+99].setCodigo(departamentos[i].getCodigo());
-			auxOrdenamiento[i+99].setCalle(departamentos[i].getCalle());
-			auxOrdenamiento[i+99].setNumero(departamentos[i].getNumero());
-			auxOrdenamiento[i+99].setCiudad(departamentos[i].getCiudad());
-			auxOrdenamiento[i+99].setPrecio(departamentos[i].getPrecio());
-			auxOrdenamiento[i+199].setCodigo(phs[i].getCodigo());
-			auxOrdenamiento[i+199].setCalle(phs[i].getCalle());
-			auxOrdenamiento[i+199].setNumero(phs[i].getNumero());
-			auxOrdenamiento[i+199].setCiudad(phs[i].getCiudad());
-			auxOrdenamiento[i+199].setPrecio(phs[i].getPrecio());
-			auxOrdenamiento[i+299].setCodigo(terrenos[i].getCodigo());
-			auxOrdenamiento[i+299].setCalle(terrenos[i].getCalle());
-			auxOrdenamiento[i+299].setNumero(terrenos[i].getNumero());
-			auxOrdenamiento[i+299].setCiudad(terrenos[i].getCiudad());
-			auxOrdenamiento[i+299].setPrecio(terrenos[i].getPrecio());
-			auxOrdenamiento[i+399].setCodigo(campos[i].getCodigo());
-			auxOrdenamiento[i+399].setCalle(campos[i].getCalle());
-			auxOrdenamiento[i+399].setNumero(campos[i].getNumero());
-			auxOrdenamiento[i+399].setCiudad(campos[i].getCiudad());
-			auxOrdenamiento[i+399].setPrecio(campos[i].getPrecio());
-			
-			 Arrays.sort(auxOrdenamiento);
-			 
-			 auxOrdenamiento.toString();
+	
+	public Propiedad buscar(Propiedad buscada) {
+		for (Propiedad prop : propiedades) {
+			if (prop.equals(buscada)) {
+				return prop;
+			}
 		}
-		
-		
-		
+		return null;
 	}
-*/
-	public ArrayList<Casa> buscarCasasPorRangoDeprecio(Double precioMinimo, Double precioMaximo){
-		ArrayList<Casa> resultado = new ArrayList<Casa>();
-		for (Casa actual : casas) {
+
+	public List<Propiedad> buscarPropiedadesPorVenta() {
+		ArrayList<Propiedad> propiedadesVendidas = new ArrayList<>();
+		for (Propiedad propiedad : propiedades) {
+			if (propiedad.getTipo().equals(TIPO_DE_OPERACION.VENTA)) {
+				propiedadesVendidas.add(propiedad);
+			}
+		}
+		return propiedadesVendidas;
+	}
+	
+	public ArrayList<Propiedad> buscarCasasPorRangoDeprecio(Double precioMinimo, Double precioMaximo){
+		ArrayList<Propiedad> resultado = new ArrayList<Propiedad>();
+		for (Propiedad actual : propiedades) {
 			if (actual.getPrecio() >= precioMinimo && actual.getPrecio() <= precioMaximo) {
 				resultado.add(actual);
 			}
@@ -390,95 +137,54 @@ public class Inmobiliaria {
     }
 	
 	
-	public Boolean venderPropiedad(Propiedad casita, Cliente clien) {
-		if (casita.getEstaDisponible().equals(true)) {
-			for (Propiedad actual : propiedades) {
-				if (actual == casita) {
-					actual.setTipo(TIPO_DE_OPERACION.VENTA);
-					actual.setEstaDisponible(false);
-					actual.setDueno(clien);
-					return true;
-				}
-			}
-			
+	public Boolean venderPropiedad(Propiedad vendida, Cliente comprador) {
+		if (vendida.getEstaDisponible()) {
+			Propiedad resultado = buscar(vendida);
+			resultado.setDueno(comprador);
+			resultado.setTipo(TIPO_DE_OPERACION.VENTA);
+			resultado.setEstaDisponible(false);
+			return true;
 		}
 		return false;
 	}
 		
 	
-	public Boolean alquilaPropiedad(Propiedad casita, Cliente clien) {
-		if (casita.getEstaDisponible().equals(true)) {
-		for (Propiedad actual : propiedades) {
-			if (actual == casita) {
-				actual.setTipo(TIPO_DE_OPERACION.ALQUILER);
-				actual.setEstaDisponible(false);
-				actual.setInquilino(clien);
-				return true;
-			}
-		}	
+	public Boolean alquilaPropiedad(Propiedad alquilada, Cliente clien) {
+		if (alquilada.getEstaDisponible()) {
+			Propiedad resultado = buscar(alquilada);
+			resultado.setInquilino(clien);
+			resultado.setTipo(TIPO_DE_OPERACION.ALQUILER);
+			resultado.setEstaDisponible(false);
+			return true;
 		}
 		return false;
 	}
 
 	public Double obtenerValorPromedioDeLasCasas() {
 		Double suma = 0.0;
-		for (Casa actual : casas) {
-			suma += actual.getPrecio();
+		Integer cont = 0;
+		for (Propiedad actual : propiedades) {
+			if (actual instanceof Casa) {
+				cont++;
+				suma += actual.getPrecio();
+			}
+			
 		}
-		return suma/casas.size();
+		return suma/cont;
 	}
 
 	public Double obtenerValorPromedioDeLosDepartamentos() {
 		Double suma = 0.0;
-		for (Departamento actual : departamentos) {
-			suma += actual.getPrecio();
-		}
-		return suma/departamentos.size();
-	}
-
-	
-	public HashSet<Casa> getCasas() {
-		return casas;
-	}
-
-	public void setCasas(HashSet<Casa> casas) {
-		this.casas = casas;
-	}
-
-	public HashSet<Departamento> getDepartamentos() {
-		return departamentos;
-	}
-
-	public void setDepartamentos(HashSet<Departamento> departamentos) {
-		this.departamentos = departamentos;
-	}
-
-	public HashSet<Cliente> getClientes() {
-		return clientes;
-	}
-
-	public void setClientes(HashSet<Cliente> clientes) {
-		this.clientes = clientes;
-	}
-
-	public List<Propiedad> buscarPropiedadesPorVenta() {
-		ArrayList<Propiedad> propiedadesVendidas = new ArrayList<>();
-		for (Propiedad propiedad : propiedades) {
-			if (propiedad.getTipo().equals(TIPO_DE_OPERACION.VENTA)) {
-				propiedadesVendidas.add(propiedad);
+		Integer cont = 0;
+		for (Propiedad actual : propiedades) {
+			if (actual instanceof Departamento) {
+				cont++;
+				suma += actual.getPrecio();
 			}
+			
 		}
-		return propiedadesVendidas;
+		return suma/cont;
 	}
-
-	public HashSet<Propiedad> getPropiedades() {
-		return propiedades;
-	}
-
-	public void setPropiedades(HashSet<Propiedad> propiedades) {
-		this.propiedades = propiedades;
-	}
-
 	
 
 

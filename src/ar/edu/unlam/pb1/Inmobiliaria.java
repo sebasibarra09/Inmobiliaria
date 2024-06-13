@@ -29,7 +29,10 @@ public class Inmobiliaria {
 		this.clientes= new HashSet<>();
 	}
 	
-	public Boolean add(Propiedad nueva) {
+	public Boolean add(Propiedad nueva) throws UmbralMinimoNoAlcanzadoException {
+		if (nueva.getPrecio() < 10000) {
+			throw new UmbralMinimoNoAlcanzadoException();
+	}
 		nueva.setTipo(TIPO_DE_OPERACION.ADQUIRIDO);
 		return propiedades.add(nueva);
 	}
@@ -98,35 +101,42 @@ public class Inmobiliaria {
 		return propiedadesVendidas;
 	}
 	
-	public ArrayList<Propiedad> buscarCasasPorRangoDeprecio(Double precioMinimo, Double precioMaximo){
+	public ArrayList<Propiedad> buscarCasasPorRangoDeprecio(Double precioMinimo, Double precioMaximo) throws SinResultadosException{
 		ArrayList<Propiedad> resultado = new ArrayList<Propiedad>();
 		for (Propiedad actual : propiedades) {
-			if (actual.getPrecio() >= precioMinimo && actual.getPrecio() <= precioMaximo) {
+			if (actual.getPrecio() >= precioMinimo && actual.getPrecio() <= precioMaximo && actual instanceof Casa) {
 				resultado.add(actual);
 			}
+		}
+		resultado.sort(Comparator.comparing(propiedad -> propiedad.getPrecio()));
+		
+		if (resultado.isEmpty()) {
+			throw new SinResultadosException();
 		}
 		return resultado;
 	}
 	
-	
-	public List<Propiedad> obtenerListadoDePropiedadesOrdenadosPorPrecio() {
-		ArrayList<Propiedad> propiedadesOrdenadas = new ArrayList<>();
-		propiedadesOrdenadas.addAll(propiedades);
-		for (int j = 0; j < propiedades.size()-1; j++) {
-			for (int i = 0; i < propiedades.size()-1; i++) {
-				if (propiedadesOrdenadas.get(i+1)!= null && propiedadesOrdenadas.get(i)!=null) {
-					if (propiedadesOrdenadas.get(i+1).getPrecio() < propiedadesOrdenadas.get(i).getPrecio()) {
-						Propiedad listado = propiedadesOrdenadas.get(i);
-						propiedadesOrdenadas.set(i, propiedadesOrdenadas.get(i+1));
-						propiedadesOrdenadas.set(i+1, listado);
-					}
-				}
-				
+	public ArrayList<Propiedad> buscarDepartamentosPorRangoDeprecio(Double precioMinimo, Double precioMaximo) throws SinResultadosException{
+		ArrayList<Propiedad> resultado = new ArrayList<Propiedad>();
+		for (Propiedad actual : propiedades) {
+			if (actual.getPrecio() >= precioMinimo && actual.getPrecio() <= precioMaximo && actual instanceof Departamento) {
+				resultado.add(actual);
 			}
-			
 		}
+		resultado.sort(Comparator.comparing(propiedad -> propiedad.getPrecio()));
 		
-		return propiedadesOrdenadas;
+		if (resultado.isEmpty()) {
+			throw new SinResultadosException();
+		}
+		return resultado;
+	}
+
+	
+	/*
+	public List<Propiedad> obtenerListadoDePropiedadesOrdenadosPorPrecio() {
+		List<Propiedad> propiedadesOrdenadas = new ArrayList<>(propiedades);
+		propiedadesOrdenadas.sort(Comparator.comparing(propiedad -> propiedad.getPrecio()));
+		  return propiedadesOrdenadas;
 		
 	}
 	
@@ -135,7 +145,7 @@ public class Inmobiliaria {
 	   propiedadesOrdenadasPorUbicacion.sort(Comparator.comparing(propiedad -> propiedad.getCiudad()));
 	   return propiedadesOrdenadasPorUbicacion;
     }
-	
+	*/
 	
 	public Boolean venderPropiedad(Propiedad vendida, Cliente comprador) {
 		if (vendida.getEstaDisponible()) {
@@ -149,7 +159,7 @@ public class Inmobiliaria {
 	}
 		
 	
-	public Boolean alquilaPropiedad(Propiedad alquilada, Cliente clien) {
+	public Boolean alquilarPropiedad(Propiedad alquilada, Cliente clien) {
 		if (alquilada.getEstaDisponible()) {
 			Propiedad resultado = buscar(alquilada);
 			resultado.setInquilino(clien);
@@ -185,15 +195,49 @@ public class Inmobiliaria {
 		}
 		return suma/cont;
 	}
+
+	public Boolean permutarPropiedad(Propiedad casita, Cliente clien, Propiedad casita2, Cliente clien2) throws LaPropiedadNoTieneDuenoException {
+		
+		if (casita.getDueno() == null || casita2.getDueno() == null) {
+			throw new LaPropiedadNoTieneDuenoException();
+		}
+		if (casita.getDueno().equals(clien) && casita2.getDueno().equals(clien2)) {
+			Propiedad permutada = buscar(casita);
+			permutada.setDueno(clien2);
+			permutada.setTipo(TIPO_DE_OPERACION.PERMUTA);
+			permutada = buscar(casita2);
+			permutada.setTipo(TIPO_DE_OPERACION.PERMUTA);
+			permutada.setDueno(clien);
+			return true;
+		}
+		return false; 
+		
+	}
+
+
 	
-
-
-
-
-
+	public List<Propiedad> buscarCasasPorUbicacion(String ciudadRecibida) {
+		List<Propiedad> propiedadesOrdenadasPorUbicacion = new ArrayList<>(propiedades);
+		for (Propiedad propiedad : propiedades) {
+			if (propiedad.getCiudad().equals(ciudadRecibida) && propiedad instanceof Casa) {
+				propiedadesOrdenadasPorUbicacion.add(propiedad);
+			}
+		}
+	   propiedadesOrdenadasPorUbicacion.sort(Comparator.comparing(propiedad -> propiedad.getCiudad()));
+	   return propiedadesOrdenadasPorUbicacion;
+    }
 	
-	
-	
+	public List<Propiedad> buscarDepartamentosPorUbicacion(String ciudadRecibida) {
+		List<Propiedad> propiedadesOrdenadasPorUbicacion = new ArrayList<>(propiedades);
+		for (Propiedad propiedad : propiedades) {
+			if (propiedad.getCiudad().equals(ciudadRecibida) && propiedad instanceof Departamento) {
+				propiedadesOrdenadasPorUbicacion.add(propiedad);
+			}
+		}
+	   propiedadesOrdenadasPorUbicacion.sort(Comparator.comparing(propiedad -> propiedad.getCiudad()));
+	   return propiedadesOrdenadasPorUbicacion;
+    }
+
 	
 
 }

@@ -27,20 +27,11 @@ class test {
 	void queSePuedanDarDeAltaDosCasasEnLaInmobiliaria() throws UmbralMinimoNoAlcanzadoException {
 		Propiedad casita = new Casa("15", "Titanic", 1212, "La Matanza", 200000.0);
 		Propiedad casita2 = new Casa("14", "Titanic", 1213, "La Matanza", 200000.0);
-		Propiedad casita3 = new Casa("16", "Titanic", 1214, "La Matanza", 200000.0);
-		Propiedad casita4 = new Casa("17", "Titanic", 1215, "La Matanza", 200000.0);
-		Propiedad casita5 = new Casa("18", "Titanic", 1216, "La Matanza", 200000.0);
 		Inmobiliaria prop = new Inmobiliaria("Prop", "Arieta", "prop@gmail.com", "1155447913");
 		prop.add(casita);
 		prop.add(casita2);
-		prop.add(casita3);
-		prop.add(casita4);
-		prop.add(casita5);
 		assertTrue(prop.getPropiedades().contains(casita));
 		assertTrue(prop.getPropiedades().contains(casita2));
-		assertTrue(prop.getPropiedades().contains(casita3));
-		assertTrue(prop.getPropiedades().contains(casita4));
-		assertTrue(prop.getPropiedades().contains(casita5));
 	}
 
 	@Test
@@ -236,6 +227,8 @@ class test {
 		List<Propiedad> resultado =prop.buscarCasasPorUbicacion("La Matanza");
 		assertEquals(casita , resultado.get(0));	
 		assertEquals(casita3 , resultado.get(1));	
+		assertEquals(casita4 , resultado.get(2));		
+		assertFalse(resultado.contains(casita2));
 	}
 	
 	/*Test n.*/
@@ -257,7 +250,7 @@ class test {
 	
 	/*Test o.*/
 	@Test
-	void queSePuedaRealizarLaBusquedaDeDepartamentosPorUbicacionYElResultadoEsteOrdenadoPorUbicacion() throws UmbralMinimoNoAlcanzadoException {
+	void queSePuedaRealizarLaBusquedaDeDepartamentosPorUbicacionYElResultadoEsteOrdenadoPorUbicacion() throws UmbralMinimoNoAlcanzadoException, SinResultadosException {
 		Propiedad departamentito = new Departamento("15", "Titanic", 1212,"4", "C", "La Matanza2", 600000.0);
 		Propiedad departamentito2 = new Departamento("12", "Titanic", 1212,"4", "D", "La Matanza", 200000.0);
 		Propiedad departamentito3 = new Departamento("1", "Titanic", 1212,"4", "D", "La Matanza", 800000.0);

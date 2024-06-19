@@ -90,6 +90,15 @@ public class Inmobiliaria {
 		}
 		return null;
 	}
+	
+	public Propiedad buscar(String buscada) {
+		for (Propiedad prop : propiedades) {
+			if (prop.getCodigo().equals(buscada)) {
+				return prop;
+			}
+		}
+		return null;
+	}
 
 	public List<Propiedad> buscarPropiedadesPorVenta() {
 		ArrayList<Propiedad> propiedadesVendidas = new ArrayList<>();
@@ -178,7 +187,6 @@ public class Inmobiliaria {
 				cont++;
 				suma += actual.getPrecio();
 			}
-			
 		}
 		return suma/cont;
 	}
@@ -191,21 +199,19 @@ public class Inmobiliaria {
 				cont++;
 				suma += actual.getPrecio();
 			}
-			
 		}
 		return suma/cont;
 	}
 
 	public Boolean permutarPropiedad(Propiedad casita, Cliente clien, Propiedad casita2, Cliente clien2) throws LaPropiedadNoTieneDuenoException {
-		
 		if (casita.getDueno() == null || casita2.getDueno() == null) {
 			throw new LaPropiedadNoTieneDuenoException();
 		}
 		if (casita.getDueno().equals(clien) && casita2.getDueno().equals(clien2)) {
-			Propiedad permutada = buscar(casita);
+			Propiedad permutada = buscar(casita.getCodigo());
 			permutada.setDueno(clien2);
 			permutada.setTipo(TIPO_DE_OPERACION.PERMUTA);
-			permutada = buscar(casita2);
+			permutada = buscar(casita2.getCodigo());
 			permutada.setTipo(TIPO_DE_OPERACION.PERMUTA);
 			permutada.setDueno(clien);
 			return true;
@@ -214,30 +220,34 @@ public class Inmobiliaria {
 		
 	}
 
-
-	
-	public List<Propiedad> buscarCasasPorUbicacion(String ciudadRecibida) {
-		List<Propiedad> propiedadesOrdenadasPorUbicacion = new ArrayList<>(propiedades);
+	public List<Propiedad> buscarCasasPorUbicacion(String ciudadRecibida) throws SinResultadosException {
+		List<Propiedad> propiedadesOrdenadasPorUbicacion = new ArrayList<>();
 		for (Propiedad propiedad : propiedades) {
 			if (propiedad.getCiudad().equals(ciudadRecibida) && propiedad instanceof Casa) {
 				propiedadesOrdenadasPorUbicacion.add(propiedad);
 			}
 		}
-	   propiedadesOrdenadasPorUbicacion.sort(Comparator.comparing(propiedad -> propiedad.getCiudad()));
+		propiedadesOrdenadasPorUbicacion.sort(Comparator.comparing(propiedad -> propiedad.getCiudad()));
+		System.out.println(propiedadesOrdenadasPorUbicacion.size());
+		
+		if (propiedadesOrdenadasPorUbicacion.isEmpty()) {
+			throw new SinResultadosException();
+		}
 	   return propiedadesOrdenadasPorUbicacion;
     }
 	
-	public List<Propiedad> buscarDepartamentosPorUbicacion(String ciudadRecibida) {
-		List<Propiedad> propiedadesOrdenadasPorUbicacion = new ArrayList<>(propiedades);
+	public List<Propiedad> buscarDepartamentosPorUbicacion(String ciudadRecibida) throws SinResultadosException {
+		List<Propiedad> propiedadesOrdenadasPorUbicacion = new ArrayList<>();
 		for (Propiedad propiedad : propiedades) {
 			if (propiedad.getCiudad().equals(ciudadRecibida) && propiedad instanceof Departamento) {
 				propiedadesOrdenadasPorUbicacion.add(propiedad);
 			}
 		}
 	   propiedadesOrdenadasPorUbicacion.sort(Comparator.comparing(propiedad -> propiedad.getCiudad()));
+	   if (propiedadesOrdenadasPorUbicacion.isEmpty()) {
+			throw new SinResultadosException();
+		}
 	   return propiedadesOrdenadasPorUbicacion;
     }
-
 	
-
 }

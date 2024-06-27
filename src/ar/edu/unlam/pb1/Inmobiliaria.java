@@ -102,35 +102,7 @@ public class Inmobiliaria {
 		return null;
 	}
 
-	public List<Operacion> buscarPropiedadesVendidas() {
-		ArrayList<Operacion> propiedadesVendidas = new ArrayList<>();
-		for (Operacion ope : operaciones) {
-			if (ope instanceof Venta) {
-				propiedadesVendidas.add(ope);
-			}
-		}
-		return propiedadesVendidas;
-	}
 	
-	public List<Operacion> buscarPropiedadesAlquiladas() {
-		ArrayList<Operacion> propiedadesVendidas = new ArrayList<>();
-		for (Operacion ope : operaciones) {
-			if (ope instanceof Alquiler) {
-				propiedadesVendidas.add(ope);
-			}
-		}
-		return propiedadesVendidas;
-	}
-	
-	public List<Operacion> buscarPropiedadesPermutadas() {
-		ArrayList<Operacion> propiedadesVendidas = new ArrayList<>();
-		for (Operacion ope : operaciones) {
-			if (ope instanceof Permuta) {
-				propiedadesVendidas.add(ope);
-			}
-		}
-		return propiedadesVendidas;
-	}
 	
 	public ArrayList<Propiedad> buscarCasasPorRangoDeprecio(Double precioMinimo, Double precioMaximo) throws SinResultadosException{
 		ArrayList<Propiedad> resultado = new ArrayList<Propiedad>();
@@ -181,10 +153,10 @@ public class Inmobiliaria {
 	public Boolean venderPropiedad(Propiedad vendida, Cliente comprador) {
 		if (vendida.getEstaDisponible()) {
 			Propiedad resultado = buscar(vendida);
-			operaciones.add(new Venta(comprador, vendida));
 			resultado.setDueno(comprador);
 			resultado.setTipo(TIPO_DE_OPERACION.VENTA);
 			resultado.setEstaDisponible(false);
+			operaciones.add(new Venta(comprador, vendida));
 			return true;
 		}
 		return false;
@@ -194,10 +166,10 @@ public class Inmobiliaria {
 	public Boolean alquilarPropiedad(Propiedad alquilada, Cliente inquilino) {
 		if (alquilada.getEstaDisponible()) {
 			Propiedad resultado = buscar(alquilada);
-			operaciones.add(new Alquiler(inquilino, alquilada));
 			resultado.setInquilino(inquilino);
 			resultado.setTipo(TIPO_DE_OPERACION.ALQUILER);
 			resultado.setEstaDisponible(false);
+			operaciones.add(new Alquiler(inquilino, alquilada));
 			return true;
 		}
 		return false;
@@ -276,6 +248,36 @@ public class Inmobiliaria {
 		}
 	   return propiedadesOrdenadasPorUbicacion;
     }
+	
+	public List<Operacion> buscarPropiedadesVendidas() {
+		ArrayList<Operacion> propiedadesVendidas = new ArrayList<>();
+		for (Operacion ope : operaciones) {
+			if (ope instanceof Venta) {
+				propiedadesVendidas.add(ope);
+			}
+		}
+		return propiedadesVendidas;
+	}
+	
+	public List<Operacion> buscarPropiedadesAlquiladas() {
+		ArrayList<Operacion> propiedadesVendidas = new ArrayList<>();
+		for (Operacion ope : operaciones) {
+			if (ope instanceof Alquiler) {
+				propiedadesVendidas.add(ope);
+			}
+		}
+		return propiedadesVendidas;
+	}
+	
+	public List<Operacion> buscarPropiedadesPermutadas() {
+		ArrayList<Operacion> propiedadesVendidas = new ArrayList<>();
+		for (Operacion ope : operaciones) {
+			if (ope instanceof Permuta) {
+				propiedadesVendidas.add(ope);
+			}
+		}
+		return propiedadesVendidas;
+	}
 
 	
 	

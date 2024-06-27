@@ -263,23 +263,25 @@ class test {
 		List<Propiedad> resultado = prop.buscarDepartamentosPorUbicacion("La Matanza");
 		assertEquals(departamentito2 , resultado.get(0));	
 		assertEquals(departamentito3 , resultado.get(1));	
+		
+	
 
 	}
 	
 	/*Test p.*/
 	@Test
 	void queAlBuscarPorUnCriterioQueNoArrojeResultadosSeProduzcaLaExcepcionSinResultadosException() throws SinResultadosException, UmbralMinimoNoAlcanzadoException {
-		Departamento departamentito = new Departamento("15", "Titanic", 1212,"4", "C", "La Matanza", 600000.0);
-		Departamento departamentito2 = new Departamento("12", "Titanic", 1212,"4", "D", "La Matanza", 100000.0);
-		Departamento departamentito3 = new Departamento("1", "Titanic", 1212,"4", "D", "La Matanza", 800000.0);
-		Departamento departamentito4 = new Departamento("10", "Titanic", 1212,"4", "D", "La Matanza", 10000000.0);
+		Departamento departamentito = new Departamento("15", "Titanic", 1212,"4", "C", "La Matanza6", 600000.0);
+		Departamento departamentito2 = new Departamento("12", "Titanic", 1212,"4", "D", "La Matanz5a", 100000.0);
+		Departamento departamentito3 = new Departamento("1", "Titanic", 1212,"4", "D", "La Matanza4", 800000.0);
+		Departamento departamentito4 = new Departamento("10", "Titanic", 1212,"4", "D", "La Matanza3", 10000000.0);
 		Inmobiliaria prop = new Inmobiliaria("Prop", "Arieta", "prop@gmail.com", "1155447913");
 		prop.add(departamentito);
 		prop.add(departamentito2);
 		prop.add(departamentito3);
 		prop.add(departamentito4);
 		assertThrows(SinResultadosException.class, () -> {
-			prop.buscarDepartamentosPorRangoDeprecio(10000001.0, 10000085.0);
+			prop.buscarDepartamentosPorUbicacion("La Matanza");
         });
 	}
 	
@@ -294,6 +296,54 @@ class test {
 
 	}
 	
+	@Test
+	void queSePuedaRealizarLaBusquedaPorVenta () throws UmbralMinimoNoAlcanzadoException {
+		Propiedad departamentito = new Departamento("12", "Titanic", 1212,"4", "D", "La Matanz5a", 100000.0);
+		Propiedad casita= new Casa("16", "Titanic", 1212, "La Matanza", 200000.0);
+		Inmobiliaria prop = new Inmobiliaria("Prop", "Arieta", "prop@gmail.com", "1155447913");
+		Cliente clien = new Cliente(121212, "Seba", "Ibarra", "seba12Qgmail.com", "1152528525");
+		prop.add(casita);
+		prop.add(departamentito);
+		prop.venderPropiedad(departamentito, clien);
+		prop.venderPropiedad(casita, clien);
+		List<Operacion> propiedadesVendidas = prop.buscarPropiedadesVendidas();
+		assertTrue(propiedadesVendidas.get(0).equals(new Venta(clien, departamentito)));
+		assertTrue(propiedadesVendidas.get(1).equals(new Venta(clien, casita)));
+		
+	}
 	
+	@Test
+	void queSePuedaRealizarLaBusquedaPorAlquiler () throws UmbralMinimoNoAlcanzadoException {
+		Propiedad departamentito = new Departamento("12", "Titanic", 1212,"4", "D", "La Matanz5a", 100000.0);
+		Propiedad casita= new Casa("16", "Titanic", 1212, "La Matanza", 200000.0);
+		Propiedad casita2= new Casa("15", "Titanic", 1212, "La Matanza", 200000.0);
+		Inmobiliaria prop = new Inmobiliaria("Prop", "Arieta", "prop@gmail.com", "1155447913");
+		Cliente clien = new Cliente(121212, "Seba", "Ibarra", "seba12Qgmail.com", "1152528525");
+		prop.add(casita);
+		prop.add(departamentito);
+		prop.alquilarPropiedad(departamentito, clien);
+		prop.venderPropiedad(casita, clien);
+		prop.alquilarPropiedad(casita2, clien);
+		List<Operacion> propiedadesAlquiladas = prop.buscarPropiedadesAlquiladas();
+		assertTrue(propiedadesAlquiladas.get(0).equals(new Alquiler(clien, departamentito)));
+		assertTrue(propiedadesAlquiladas.get(1).equals(new Alquiler(clien, casita2)));
+		assertEquals(propiedadesAlquiladas.size(), 2);
 	
+	}
+	
+	@Test
+	void queSePuedaRealizarLaBusquedaPorPermuta () throws UmbralMinimoNoAlcanzadoException, LaPropiedadNoTieneDuenoException {
+		Propiedad casita = new Casa("15", "Titanic", 1212, "La Matanza", 200000.0);
+		Propiedad casita2 = new Departamento("14", "Titanic", 1212, "La Matanza", "A", "C", 200000.0);
+		Inmobiliaria prop = new Inmobiliaria("Prop", "Arieta", "prop@gmail.com", "1155447913");
+		Cliente clien = new Cliente(121212, "Seba", "Ibarra", "seba12Qgmail.com", "1152528525");
+		Cliente clien2 = new Cliente(121214, "Seba", "Ibarra", "seba12Qgmail.com", "1152528525");
+		prop.add(casita);
+		prop.add(casita2);
+		prop.venderPropiedad(casita, clien);
+		prop.venderPropiedad(casita2, clien2);
+		prop.permutarPropiedad(casita, clien, casita2, clien2);
+		List<Operacion> propiedadesPermutadas = prop.buscarPropiedadesPermutadas();
+		assertTrue(propiedadesPermutadas.get(0).equals(new Permuta(clien, casita, clien2, casita2)));
+	}
 }

@@ -18,6 +18,7 @@ public class Inmobiliaria {
 	private String telefono;
 	private HashSet<Propiedad> propiedades;
 	private HashSet<Cliente> clientes;
+	private ArrayList<Operacion> operaciones;
 	
 	
 	public Inmobiliaria(String nombre, String direccion, String eMail, String telefono) {
@@ -27,6 +28,7 @@ public class Inmobiliaria {
 		this.telefono = telefono;
 		this.propiedades= new HashSet<>();
 		this.clientes= new HashSet<>();
+		this.operaciones= new ArrayList<>();
 	}
 	
 	public Boolean add(Propiedad nueva) throws UmbralMinimoNoAlcanzadoException {
@@ -100,11 +102,31 @@ public class Inmobiliaria {
 		return null;
 	}
 
-	public List<Propiedad> buscarPropiedadesPorVenta() {
-		ArrayList<Propiedad> propiedadesVendidas = new ArrayList<>();
-		for (Propiedad propiedad : propiedades) {
-			if (propiedad.getTipo().equals(TIPO_DE_OPERACION.VENTA)) {
-				propiedadesVendidas.add(propiedad);
+	public List<Operacion> buscarPropiedadesVendidas() {
+		ArrayList<Operacion> propiedadesVendidas = new ArrayList<>();
+		for (Operacion ope : operaciones) {
+			if (ope instanceof Venta) {
+				propiedadesVendidas.add(ope);
+			}
+		}
+		return propiedadesVendidas;
+	}
+	
+	public List<Operacion> buscarPropiedadesAlquiladas() {
+		ArrayList<Operacion> propiedadesVendidas = new ArrayList<>();
+		for (Operacion ope : operaciones) {
+			if (ope instanceof Alquiler) {
+				propiedadesVendidas.add(ope);
+			}
+		}
+		return propiedadesVendidas;
+	}
+	
+	public List<Operacion> buscarPropiedadesPermutadas() {
+		ArrayList<Operacion> propiedadesVendidas = new ArrayList<>();
+		for (Operacion ope : operaciones) {
+			if (ope instanceof Permuta) {
+				propiedadesVendidas.add(ope);
 			}
 		}
 		return propiedadesVendidas;
@@ -159,6 +181,7 @@ public class Inmobiliaria {
 	public Boolean venderPropiedad(Propiedad vendida, Cliente comprador) {
 		if (vendida.getEstaDisponible()) {
 			Propiedad resultado = buscar(vendida);
+			operaciones.add(new Venta(comprador, vendida));
 			resultado.setDueno(comprador);
 			resultado.setTipo(TIPO_DE_OPERACION.VENTA);
 			resultado.setEstaDisponible(false);
@@ -168,15 +191,34 @@ public class Inmobiliaria {
 	}
 		
 	
-	public Boolean alquilarPropiedad(Propiedad alquilada, Cliente clien) {
+	public Boolean alquilarPropiedad(Propiedad alquilada, Cliente inquilino) {
 		if (alquilada.getEstaDisponible()) {
 			Propiedad resultado = buscar(alquilada);
-			resultado.setInquilino(clien);
+			operaciones.add(new Alquiler(inquilino, alquilada));
+			resultado.setInquilino(inquilino);
 			resultado.setTipo(TIPO_DE_OPERACION.ALQUILER);
 			resultado.setEstaDisponible(false);
 			return true;
 		}
 		return false;
+	}
+	
+	public Boolean permutarPropiedad(Propiedad casita, Cliente clien, Propiedad casita2, Cliente clien2) throws LaPropiedadNoTieneDuenoException {
+		if (casita.getDueno() == null || casita2.getDueno() == null) {
+			throw new LaPropiedadNoTieneDuenoException();
+		}
+		if (casita.getDueno().equals(clien) && casita2.getDueno().equals(clien2)) {
+			Propiedad permutada = buscar(casita.getCodigo());
+			permutada.setDueno(clien2);
+			permutada.setTipo(TIPO_DE_OPERACION.PERMUTA);
+			permutada = buscar(casita2.getCodigo());
+			permutada.setTipo(TIPO_DE_OPERACION.PERMUTA);
+			permutada.setDueno(clien);
+			operaciones.add(new Permuta(clien, casita, clien2, casita2));
+			return true;
+		}
+		return false; 
+		
 	}
 
 	public Double obtenerValorPromedioDeLasCasas() {
@@ -203,22 +245,7 @@ public class Inmobiliaria {
 		return suma/cont;
 	}
 
-	public Boolean permutarPropiedad(Propiedad casita, Cliente clien, Propiedad casita2, Cliente clien2) throws LaPropiedadNoTieneDuenoException {
-		if (casita.getDueno() == null || casita2.getDueno() == null) {
-			throw new LaPropiedadNoTieneDuenoException();
-		}
-		if (casita.getDueno().equals(clien) && casita2.getDueno().equals(clien2)) {
-			Propiedad permutada = buscar(casita.getCodigo());
-			permutada.setDueno(clien2);
-			permutada.setTipo(TIPO_DE_OPERACION.PERMUTA);
-			permutada = buscar(casita2.getCodigo());
-			permutada.setTipo(TIPO_DE_OPERACION.PERMUTA);
-			permutada.setDueno(clien);
-			return true;
-		}
-		return false; 
-		
-	}
+	
 
 	public List<Propiedad> buscarCasasPorUbicacion(String ciudadRecibida) throws SinResultadosException {
 		List<Propiedad> propiedadesOrdenadasPorUbicacion = new ArrayList<>();
@@ -249,5 +276,7 @@ public class Inmobiliaria {
 		}
 	   return propiedadesOrdenadasPorUbicacion;
     }
+
+	
 	
 }

@@ -131,6 +131,7 @@ class test {
 		Propiedad casita = new Propiedad("15", "Titanic", 1212, "La Matanza", 200000.0);
 		Inmobiliaria prop = new Inmobiliaria("Prop", "Arieta", "prop@gmail.com", "1155447913");
 		Cliente clien = new Cliente(121212, "Seba", "Ibarra", "seba12Qgmail.com", "1152528525");
+		prop.addCliente(clien);
 		prop.add(casita);
 		prop.venderPropiedad(casita, clien);
 		assertEquals(casita.getDueno(), clien);
@@ -143,6 +144,7 @@ class test {
 		Propiedad casita = new Casa("15", "Titanic", 1212, "La Matanza", 200000.0);
 		Inmobiliaria prop = new Inmobiliaria("Prop", "Arieta", "prop@gmail.com", "1155447913");
 		Cliente clien = new Cliente(121212, "Seba", "Ibarra", "seba12Qgmail.com", "1152528525");
+		prop.addCliente(clien);
 		prop.add(casita);
 		prop.venderPropiedad(casita, clien);
 		assertFalse(prop.venderPropiedad(casita, clien));
@@ -154,6 +156,7 @@ class test {
 		Propiedad casita = new Casa("15", "Titanic", 1212, "La Matanza", 200000.0);
 		Inmobiliaria prop = new Inmobiliaria("Prop", "Arieta", "prop@gmail.com", "1155447913");
 		Cliente clien = new Cliente(121212, "Seba", "Ibarra", "seba12Qgmail.com", "1152528525");
+		prop.addCliente(clien);
 		prop.add(casita);
 		prop.alquilarPropiedad(casita, clien);
 		assertEquals(casita.getInquilino(), clien);
@@ -169,6 +172,8 @@ class test {
 		Inmobiliaria prop = new Inmobiliaria("Prop", "Arieta", "prop@gmail.com", "1155447913");
 		Cliente clien = new Cliente(121212, "Seba", "Ibarra", "seba12Qgmail.com", "1152528525");
 		Cliente clien2 = new Cliente(121214, "Seba", "Ibarra", "seba12Qgmail.com", "1152528525");
+		prop.addCliente(clien);
+		prop.addCliente(clien2);
 		prop.add(casita);
 		prop.add(casita2);
 		prop.venderPropiedad(casita, clien);
@@ -185,6 +190,8 @@ class test {
 		Inmobiliaria prop = new Inmobiliaria("Prop", "Arieta", "prop@gmail.com", "1155447913");
 		Cliente clien = new Cliente(121212, "Seba", "Ibarra", "seba12Qgmail.com", "1152528525");
 		Cliente clien2 = new Cliente(121214, "Seba", "Ibarra", "seba12Qgmail.com", "1152528525");
+		prop.addCliente(clien);
+		prop.addCliente(clien2);
 		prop.add(casita);
 		prop.add(casita2);
 		prop.venderPropiedad(casita, clien);
@@ -263,9 +270,6 @@ class test {
 		List<Propiedad> resultado = prop.buscarDepartamentosPorUbicacion("La Matanza");
 		assertEquals(departamentito2 , resultado.get(0));	
 		assertEquals(departamentito3 , resultado.get(1));	
-		
-	
-
 	}
 	
 	/*Test p.*/
@@ -302,13 +306,17 @@ class test {
 		Propiedad casita= new Casa("16", "Titanic", 1212, "La Matanza", 200000.0);
 		Inmobiliaria prop = new Inmobiliaria("Prop", "Arieta", "prop@gmail.com", "1155447913");
 		Cliente clien = new Cliente(121212, "Seba", "Ibarra", "seba12Qgmail.com", "1152528525");
+		prop.addCliente(clien);
 		prop.add(casita);
 		prop.add(departamentito);
 		prop.venderPropiedad(departamentito, clien);
 		prop.venderPropiedad(casita, clien);
 		List<Operacion> propiedadesVendidas = prop.buscarPropiedadesVendidas();
-		assertTrue(propiedadesVendidas.get(0).equals(new Venta(clien, departamentito)));
-		assertTrue(propiedadesVendidas.get(1).equals(new Venta(clien, casita)));
+		assertTrue(propiedadesVendidas.get(0).getCliente().equals(clien));
+		assertTrue(propiedadesVendidas.get(0).getProp().equals(departamentito));
+		assertTrue(propiedadesVendidas.get(1).getCliente().equals(clien));
+		assertTrue(propiedadesVendidas.get(1).getProp().equals(casita));
+		assertEquals(propiedadesVendidas.size(), 2);
 		
 	}
 	
@@ -319,14 +327,17 @@ class test {
 		Propiedad casita2= new Casa("15", "Titanic", 1212, "La Matanza", 200000.0);
 		Inmobiliaria prop = new Inmobiliaria("Prop", "Arieta", "prop@gmail.com", "1155447913");
 		Cliente clien = new Cliente(121212, "Seba", "Ibarra", "seba12Qgmail.com", "1152528525");
+		prop.addCliente(clien);
 		prop.add(casita);
 		prop.add(departamentito);
 		prop.alquilarPropiedad(departamentito, clien);
 		prop.venderPropiedad(casita, clien);
 		prop.alquilarPropiedad(casita2, clien);
 		List<Operacion> propiedadesAlquiladas = prop.buscarPropiedadesAlquiladas();
-		assertTrue(propiedadesAlquiladas.get(0).equals(new Alquiler(clien, departamentito)));
-		assertTrue(propiedadesAlquiladas.get(1).equals(new Alquiler(clien, casita2)));
+		assertTrue(propiedadesAlquiladas.get(0).getCliente().equals(clien));
+		assertTrue(propiedadesAlquiladas.get(0).getProp().equals(departamentito));
+		assertTrue(propiedadesAlquiladas.get(1).getCliente().equals(clien));
+		assertTrue(propiedadesAlquiladas.get(1).getProp().equals(casita));
 		assertEquals(propiedadesAlquiladas.size(), 2);
 	
 	}
@@ -338,12 +349,18 @@ class test {
 		Inmobiliaria prop = new Inmobiliaria("Prop", "Arieta", "prop@gmail.com", "1155447913");
 		Cliente clien = new Cliente(121212, "Seba", "Ibarra", "seba12Qgmail.com", "1152528525");
 		Cliente clien2 = new Cliente(121214, "Seba", "Ibarra", "seba12Qgmail.com", "1152528525");
+		prop.addCliente(clien);
+		prop.addCliente(clien2);
 		prop.add(casita);
 		prop.add(casita2);
 		prop.venderPropiedad(casita, clien);
 		prop.venderPropiedad(casita2, clien2);
 		prop.permutarPropiedad(casita, clien, casita2, clien2);
 		List<Operacion> propiedadesPermutadas = prop.buscarPropiedadesPermutadas();
-		assertTrue(propiedadesPermutadas.get(0).equals(new Permuta(clien, casita, clien2, casita2)));
+		assertTrue(((Permuta) propiedadesPermutadas.get(0)).getCliente().equals(clien));
+		assertTrue(((Permuta) propiedadesPermutadas.get(0)).getProp().equals(casita));
+		assertTrue(((Permuta) propiedadesPermutadas.get(0)).getCliente2().equals(clien2));
+		assertTrue(((Permuta) propiedadesPermutadas.get(0)).getProp2().equals(casita2));
+		assertEquals(propiedadesPermutadas.size(), 1);
 	}
 }

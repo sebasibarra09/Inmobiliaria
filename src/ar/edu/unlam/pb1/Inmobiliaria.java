@@ -101,6 +101,15 @@ public class Inmobiliaria {
 		}
 		return null;
 	}
+	
+	private Cliente buscarCliente(Cliente comprador) {
+		for (Cliente cliente : clientes) {
+			if (cliente.equals(comprador)) {
+				return cliente;
+			}
+		}
+		return null;
+	}
 
 	
 	
@@ -152,24 +161,23 @@ public class Inmobiliaria {
 	
 	public Boolean venderPropiedad(Propiedad vendida, Cliente comprador) {
 		if (vendida.getEstaDisponible()) {
-			Propiedad resultado = buscar(vendida);
-			resultado.setDueno(comprador);
-			resultado.setTipo(TIPO_DE_OPERACION.VENTA);
-			resultado.setEstaDisponible(false);
-			operaciones.add(new Venta(comprador, vendida));
+			Propiedad propiedadBuscada = buscar(vendida);
+			Cliente clienteBuscado = buscarCliente(comprador);
+			Venta nuevaVenta = new Venta(clienteBuscado, propiedadBuscada);
+			nuevaVenta.realizarOperacion();
+			operaciones.add(nuevaVenta);
 			return true;
 		}
 		return false;
 	}
-		
-	
+
 	public Boolean alquilarPropiedad(Propiedad alquilada, Cliente inquilino) {
 		if (alquilada.getEstaDisponible()) {
-			Propiedad resultado = buscar(alquilada);
-			resultado.setInquilino(inquilino);
-			resultado.setTipo(TIPO_DE_OPERACION.ALQUILER);
-			resultado.setEstaDisponible(false);
-			operaciones.add(new Alquiler(inquilino, alquilada));
+			Propiedad propiedadBuscada = buscar(alquilada);
+			Cliente clienteBuscado = buscarCliente(inquilino);
+			Alquiler nuevoAlquiler = new Alquiler(clienteBuscado, propiedadBuscada);
+			nuevoAlquiler.realizarOperacion();
+			operaciones.add(nuevoAlquiler);
 			return true;
 		}
 		return false;
@@ -180,13 +188,13 @@ public class Inmobiliaria {
 			throw new LaPropiedadNoTieneDuenoException();
 		}
 		if (casita.getDueno().equals(clien) && casita2.getDueno().equals(clien2)) {
-			Propiedad permutada = buscar(casita.getCodigo());
-			permutada.setDueno(clien2);
-			permutada.setTipo(TIPO_DE_OPERACION.PERMUTA);
-			permutada = buscar(casita2.getCodigo());
-			permutada.setTipo(TIPO_DE_OPERACION.PERMUTA);
-			permutada.setDueno(clien);
-			operaciones.add(new Permuta(clien, casita, clien2, casita2));
+			Propiedad propiedadBuscada = buscar(casita);
+			Cliente clienteBuscado = buscarCliente(clien);
+			Propiedad propiedadBuscada2 = buscar(casita2);
+			Cliente clienteBuscado2 = buscarCliente(clien2);
+			Permuta nuevaPermuta = new Permuta(clienteBuscado, propiedadBuscada, clienteBuscado2, propiedadBuscada2);
+			nuevaPermuta.realizarOperacion();
+			operaciones.add(nuevaPermuta);
 			return true;
 		}
 		return false; 
